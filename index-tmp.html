@@ -4,6 +4,11 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Ari Essunfeld</title>
+  
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;600;700&display=swap" rel="stylesheet">
+
   <style>
     body {
       font-family: Arial, sans-serif;
@@ -24,6 +29,7 @@
       padding: 14px 16px;
       text-decoration: none;
       font-size: 17px;
+      font-family: 'Orbitron', sans-serif;
     }
 
     .header a:hover {
@@ -46,6 +52,15 @@
     span.s3 {font-kerning: none; color: #f6000b; -webkit-text-stroke: 0px #f6000b}
     span.s4 {font-kerning: none; color: #7e0d19; -webkit-text-stroke: 0px #7e0d19}
     span.s5 {font-kerning: none; background-color: #ffffff}
+    
+    .cursor-ball {
+      position: absolute;
+      border-radius: 50%;
+      background-color: lightblue;
+      pointer-events: none;
+      opacity: 0;
+      transition: opacity 0.3s;
+    }
   </style>
 </head>
 <body>
@@ -75,5 +90,46 @@
   <p class="p1"><span class="s1">&lt;</span><span class="s2">/body</span><span class="s1">&gt;</span></p>
   <p class="p1"><span class="s1">&lt;</span><span class="s2">/html</span><span class="s1">&gt;</span></p>
 
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      const cursorBall = document.createElement('div');
+      cursorBall.classList.add('cursor-ball');
+      document.body.appendChild(cursorBall);
+
+      let animationFrameId;
+      let mouseX = 0;
+      let mouseY = 0;
+      let ballX = 0;
+      let ballY = 0;
+      let scale = 0;
+      let opacity = 0;
+
+      document.addEventListener('mousemove', (e) => {
+        mouseX = e.clientX;
+        mouseY = e.clientY;
+      });
+
+      document.addEventListener('mousedown', () => {
+        opacity = 1;
+        cursorBall.style.opacity = opacity;
+      });
+
+      document.addEventListener('mouseup', () => {
+        opacity = 0;
+        cursorBall.style.opacity = opacity;
+      });
+
+      const animate = () => {
+        ballX += (mouseX - ballX) * 0.2;
+        ballY += (mouseY - ballY) * 0.2;
+        scale = (Math.sin(Date.now() * 0.01) + 1.5) * (opacity * 20);
+        cursorBall.style.transform = `translate(${ballX - scale / 2}px, ${ballY - scale / 2}px) scale(${scale})`;
+
+        animationFrameId = requestAnimationFrame(animate);
+      };
+
+      animate();
+    });
+  </script>
 </body>
 </html>
